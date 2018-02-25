@@ -140,7 +140,6 @@ int main(void) {
 
 
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
 	glDisable(GL_DEPTH_TEST);
@@ -158,9 +157,7 @@ int main(void) {
 		glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
 
 
-		glEnable(GL_BLEND);
 		font::draw();
-		glDisable(GL_BLEND);
 
 		glUseProgram(program_POST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

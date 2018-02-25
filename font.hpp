@@ -20,8 +20,12 @@ class textbox {
 	const int windowWidth = 1024;
 	const int windowHeight = 768;
 
+	// # std::unordered_map<int, textbox*> textbox::ownerList
+	// どのテキストボックスが描画リスト何番目の文字を所有しているのかを管理する
+	// 描画リストの並び替え(削除時に発生する)の際、持ち主テキストボックスに通知するのに使用する
 	static std::unordered_map<int, textbox*> ownerList;
 
+	// テキストのプロパティ
 	std::wstring text;
 	int x;
 	int y;
@@ -31,6 +35,7 @@ class textbox {
 	int b;
 	int length;
 
+	// このクラス(textbox)が管理する文字が文字描画リストの何番目に今あるのかを管理する
 	std::unique_ptr<int[]> characterIDArray;
 
 	public:
@@ -40,6 +45,8 @@ class textbox {
 	void updateSize(int newSize);
 	void updatePos(int newX, int newY);
 
+	//void render() : これは実際に画面に描画する訳ではなく、
+	//                描画するために頂点情報を計算して記録する関数である。(ネーミングが下手)
 	void render();
 	void updateID(int before, int after);
 	void destroy();
@@ -48,6 +55,7 @@ class textbox {
 
 namespace font {
 
+	// 一頂点を表現
 	struct xyuvrgb {
 		float x;
 		float y;
@@ -58,6 +66,7 @@ namespace font {
 		float b;
 	};
 
+	// 一文字を画面に表示するための"長方形"を表現
 	struct character {
 		xyuvrgb v0;
 		xyuvrgb v1;
@@ -67,6 +76,10 @@ namespace font {
 		xyuvrgb v5;
 	};
 
+	// Free Typeからの文字情報を格納する。
+	// テクスチャアトラスのどの位置にこの文字が存在するのか、
+	// 文字の幅・高さ・ベースラインからの位置等が記録されている。
+	// この情報を正しく使うことで、きれいに文字を並べることができる。
 	struct charInfo {
 		//10 11
 		//00 01
@@ -85,7 +98,8 @@ namespace font {
 		unsigned int advanceWidth;
 	};
 
-
+	// テクスチャアトラスの高さ。この大きさに合うようフォントをFreeTypeでレンダするので、
+	// これを大きくすることできれいな文字を描画できる(ハズ)。
 	const GLuint textureHeight = 128;
 
 	extern GLuint textAtlas;
@@ -96,20 +110,45 @@ namespace font {
 	extern GLuint program_TEXT;
 	extern GLuint characterVAO, characterVBO;
 
+	// テクスチャアトラスに順番に文字を配置するために使用する。
 	extern GLuint textAtlasItr;
+
+	// テクスチャアトラス上のUV座標を計算するのに用いる。
+	// 管理する文字が多くなると、この値は自動で大きくなる。(初期値はcppに記載)
 	extern GLuint textAtlasWidth;
+
+	// 描画する文字のリスト。ここにcharacterを入れることで、画面に実際に描画される。
 	extern std::vector<character> characterVector;
+
+	// 文字情報を高速に取得するために使う。
+	// Unicodeから文字の幅などの情報を引ける。
 	extern std::unordered_map<wchar_t, charInfo> charMap;
 
 
 
 	//字形情報を返す。フォントレンダからの字形登録までやってくれる。
 	charInfo getCharInfo(wchar_t request);
+
 	void reloadVBO();
-	void expandVBO();
+
+	// アトラステクスチャの大きさが不足した際、二倍の大きさにする
+	void expandTexture();
+
+	// characterを投げるとリストに追加してくれる。
+	// その時、今登録したcharacterが、リストの何番目に入ったのか通知してくれる。
+	// この関数を拡張すれば、複雑な並び替えなどしなくていいのでは🤔 #TODO
 	int addCharacterToDrawList(character request);
+
+	// id番目のcharacterをリストから消去する。
+	// その時、削除した場所に移動されたcharacterの元idを返す。
+	// この関数を呼んだときは、ownerListを使って移動されたcharacterの
+	// 持ち主textBoxに通知しなければならない。
 	int removeCharacterFromDrawList(int id);
+
+	// 呼んで。まず。
 	void setup();
+
+	// 実際に画面に描画する。
 	void draw();
 
 }
