@@ -61,12 +61,15 @@ int main(void) {
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	// Create and compile our GLSL program from the shaders
+	// ほんぺ描画用シェーダ
 	GLuint program_MAIN = LoadShaders("main.vert", "main.frag");
+	// 後処理用のシェーダ
 	GLuint program_POST = LoadShaders("postProcess.vert", "postProcess.frag");
 
+	// fontのセットアップ(大事)
 	font::setup();
 
+	// 後処理に送るため、内容はこのテクスチャに描画します。
 	unsigned int framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -89,7 +92,10 @@ int main(void) {
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
 
-	float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+
+
+	// 後処理の後、それを画面に表示するためのポリゴン。画面いっぱいに広げて使う。
+	float quadVertices[] = {
 		// positions   // texCoords
 		-1.0f,  1.0f,  0.0f, 1.0f,
 		-1.0f, -1.0f,  0.0f, 0.0f,
@@ -100,7 +106,6 @@ int main(void) {
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	// screen quad VAO
 	unsigned int quadVAO, quadVBO;
 	glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &quadVBO);
@@ -113,13 +118,13 @@ int main(void) {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
 
+	// 一応の内容である三角です
 	static const GLfloat g_vertex_buffer_data[] = { 
 		-1.0f, -1.0f,
 		 1.0f, -1.0f,
 		 0.0f,  1.0f,
 	};
 
-	// screen quad VAO
 	unsigned int triangleVAO, triangleVBO;
 	glGenVertexArrays(1, &triangleVAO);
 	glGenBuffers(1, &triangleVBO);
@@ -130,6 +135,8 @@ int main(void) {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
 
+
+
 	textbox hoge0 = textbox(L"柳暗花明又一村", 1024/2 - 210, 768/2 + 200, 60, 255, 255, 255);
 	textbox hoge2 = textbox(L"これよこれ This is what I wanted.", 1024/2 - 480, 768/2 - 200, 60, 50, 255, 100);
 
@@ -137,8 +144,6 @@ int main(void) {
 
 	hoge1.updateText(L"日本語ですあいうえおかきくけこさしすせそたちつてと");
 	hoge1.updateSize(10);
-
-
 
 
 
@@ -174,9 +179,9 @@ int main(void) {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-	} // Check if the ESC key was pressed or the window was closed
+	}
 
-
+	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 
