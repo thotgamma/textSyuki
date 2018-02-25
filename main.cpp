@@ -21,12 +21,10 @@ GLFWwindow* window;
 
 #include "font.hpp"
 
-GLuint textAtlas;
 
 int main(void) {
 	// Initialise GLFW
-	if( !glfwInit() )
-	{
+	if( !glfwInit() ) {
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		getchar();
 		return -1;
@@ -38,7 +36,7 @@ int main(void) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow( 1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
+	window = glfwCreateWindow( 1024, 768, "Text test", NULL, NULL);
 	if( window == NULL ){
 		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
 		getchar();
@@ -59,8 +57,6 @@ int main(void) {
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-
-
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -69,9 +65,7 @@ int main(void) {
 	GLuint program_MAIN = LoadShaders("main.vert", "main.frag");
 	GLuint program_POST = LoadShaders("postProcess.vert", "postProcess.frag");
 
-
 	font::setup();
-
 
 	unsigned int framebuffer;
 	glGenFramebuffers(1, &framebuffer);
@@ -106,8 +100,6 @@ int main(void) {
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-
-
 	// screen quad VAO
 	unsigned int quadVAO, quadVBO;
 	glGenVertexArrays(1, &quadVAO);
@@ -137,14 +129,11 @@ int main(void) {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-		glDisable(GL_DEPTH_TEST);
-	do {
+	glDisable(GL_DEPTH_TEST);
+	while (glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS && glfwWindowShouldClose(window) == 0 ) {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glViewport(0, 0, 1024, 768);
@@ -157,17 +146,18 @@ int main(void) {
 		glBindVertexArray(triangleVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
 
+
+		glEnable(GL_BLEND);
 		font::draw();
+		glDisable(GL_BLEND);
 
 		glUseProgram(program_POST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(0, 0, 1024*2, 768*2);
-//		glDisable(GL_DEPTH_TEST);
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glBindVertexArray(quadVAO);
-//		glBindTexture(GL_TEXTURE_2D, textAtlas);
 		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -177,8 +167,7 @@ int main(void) {
 		glfwPollEvents();
 
 	} // Check if the ESC key was pressed or the window was closed
-	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0 );
+
 
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);

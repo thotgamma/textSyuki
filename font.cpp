@@ -103,6 +103,9 @@ void textbox::destroy() {
 }
 
 namespace font {
+
+	GLuint textAtlas;
+
 	FT_Library ft;
 	FT_Face face;
 

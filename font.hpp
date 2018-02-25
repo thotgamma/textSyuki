@@ -16,11 +16,6 @@
 #include "shader.hpp"
 
 
-
-
-
-extern GLuint textAtlas;
-
 class textbox {
 	const int windowWidth = 1024;
 	const int windowHeight = 768;
@@ -92,6 +87,8 @@ namespace font {
 
 
 	const GLuint textureHeight = 128;
+
+	extern GLuint textAtlas;
 
 	extern FT_Library ft;
 	extern FT_Face face;
