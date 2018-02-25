@@ -67,7 +67,7 @@ int main(void) {
 
 	// Create and compile our GLSL program from the shaders
 	GLuint program_MAIN = LoadShaders("main.vert", "main.frag");
-	GLuint program_PLAY = LoadShaders("play.vert", "play.frag");
+	GLuint program_POST = LoadShaders("postProcess.vert", "postProcess.frag");
 
 
 	font::setup();
@@ -159,7 +159,7 @@ int main(void) {
 
 		font::draw();
 
-		glUseProgram(program_PLAY);
+		glUseProgram(program_POST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(0, 0, 1024*2, 768*2);
 //		glDisable(GL_DEPTH_TEST);

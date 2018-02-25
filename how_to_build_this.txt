@@ -1,1 +1,1 @@
-g++-7 -std=c++17 -I /usr/local/include/freetype2 -L /usr/local/lib/ -l freetype -l glfw -lglew -framework OpenGL hoge.cpp shader.cpp font.cpp
+g++-7 -std=c++17 -I /usr/local/include/freetype2 -L /usr/local/lib/ -l freetype -l glfw -lglew -framework OpenGL main.cpp shader.cpp font.cpp
