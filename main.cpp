@@ -36,7 +36,7 @@ int main(void) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow( 1024, 768, "Text test", NULL, NULL);
+	window = glfwCreateWindow(1024, 768, "Text test", NULL, NULL);
 	if( window == NULL ){
 		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
 		getchar();
@@ -128,6 +128,17 @@ int main(void) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), &g_vertex_buffer_data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+
+	textbox hoge0 = textbox(L"柳暗花明又一村", 1024/2 - 210, 768/2 + 200, 60, 255, 255, 255);
+	textbox hoge2 = textbox(L"これよこれ This is what I wanted.", 1024/2 - 480, 768/2 - 200, 60, 50, 255, 100);
+
+	textbox hoge1 = textbox(L"柳暗花明又一村", 1024/2 - 355, 768/2, 100, 255, 255, 100);
+
+	hoge1.updateText(L"日本語ですあいうえおかきくけこさしすせそたちつてと");
+	hoge1.updateSize(10);
+
+
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

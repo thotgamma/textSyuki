@@ -203,11 +203,11 @@ namespace font {
 	void setup() {
 		if (FT_Init_FreeType(&ft))
 			std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+
 		if (FT_New_Face(ft, "/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc", 0, &face))
 			std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;  
 
 		FT_Set_Pixel_Sizes(face, 0, textureHeight);
-
 
 		glGenTextures(1, &textAtlas);
 		glBindTexture(GL_TEXTURE_2D, textAtlas);
@@ -219,7 +219,6 @@ namespace font {
 
 
 		program_TEXT = LoadShaders("text.vert", "text.frag");
-
 
 		// screen quad VAO
 		glGenVertexArrays(1, &characterVAO);
@@ -233,14 +232,6 @@ namespace font {
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(xyuvrgb), (void*)(2 * sizeof(float)));
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(xyuvrgb), (void*)(4 * sizeof(float)));
-
-		textbox hoge0 = textbox(L"柳暗花明又一村", 1024/2 - 210, 768/2 + 200, 60, 255, 255, 255);
-		textbox hoge2 = textbox(L"これよこれ This is what I wanted.", 1024/2 - 480, 768/2 - 200, 60, 50, 255, 100);
-
-		textbox hoge1 = textbox(L"柳暗花明又一村", 1024/2 - 355, 768/2, 100, 255, 255, 100);
-
-		hoge1.updateText(L"日本語ですあいうえおかきくけこさしすせそたちつてと");
-		hoge1.updateSize(10);
 
 	}
 
