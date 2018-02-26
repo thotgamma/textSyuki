@@ -7,7 +7,7 @@ std::unordered_map<int, textbox*> textbox::ownerList;
 
 
 textbox::textbox(std::wstring text, int x, int y, int size, int r, int g, int b):
-											text(text), size(size), x(x), y(y), r(r), g(g), b(b) {
+											text(text), x(x), y(y), size(size), r(r), g(g), b(b) {
 	length = text.length();
 	render();
 }
@@ -263,6 +263,7 @@ namespace font {
 		// テキスト描画用のシェーダ
 		program_TEXT = LoadShaders("text.vert", "text.frag");
 
+
 		// 描画リストの構造をここでGPUに伝えている。
 		// 構造は[x, y, u, v, r, g, b] (というかstruct xyuvrgb)
 		glGenVertexArrays(1, &characterVAO);
@@ -270,6 +271,7 @@ namespace font {
 		glBindVertexArray(characterVAO);
 		glBindBuffer(GL_ARRAY_BUFFER, characterVBO);
 		glBufferData(GL_ARRAY_BUFFER, characterVector.size() * sizeof(character), &characterVector[0], GL_STATIC_DRAW);
+
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(xyuvrgb), (void*)0);
 		glEnableVertexAttribArray(1);
