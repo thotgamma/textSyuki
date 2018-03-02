@@ -137,13 +137,7 @@ int main(void) {
 
 
 
-	textbox hoge0 = textbox(L"柳暗花明又一村", 1024/2 - 210, 768/2 + 200, 60, 255, 255, 255);
-	textbox hoge2 = textbox(L"これよこれ This is what I wanted.", 1024/2 - 480, 768/2 - 200, 60, 50, 255, 100);
-
-	textbox hoge1 = textbox(L"柳暗花明又一村", 1024/2 - 355, 768/2, 100, 255, 255, 100);
-
-	hoge1.updateText(L"日本語ですあいうえおかきくけこさしすせそたちつてと");
-	hoge1.updateSize(10);
+	textbox hoge0 = textbox(u"message", 1024/2 - 210, 768/2 + 200, 60, 255, 255, 255);
 
 
 

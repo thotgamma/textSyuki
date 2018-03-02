@@ -6,7 +6,7 @@
 std::unordered_map<int, textbox*> textbox::ownerList;
 
 
-textbox::textbox(std::wstring text, int x, int y, int size, int r, int g, int b):
+textbox::textbox(std::u16string text, int x, int y, int size, int r, int g, int b):
 											text(text), x(x), y(y), size(size), r(r), g(g), b(b) {
 	length = text.length();
 	render();
@@ -66,7 +66,7 @@ void textbox::render() {
 
 // --以下テクストボックスの更新系。めんどくさいのでプロパティを適切に変更した後、--------┐
 // 文字を全部削除して追加し直している。(本当は一部のプロパティを書き換えるだけでOK) #TODO
-void textbox::updateText(std::wstring newText) {
+void textbox::updateText(std::u16string newText) {
 	destroy();
 	text = newText;
 	length = newText.length();
@@ -133,10 +133,12 @@ namespace font {
 	GLuint textAtlasItr = 0;
 	GLuint textAtlasWidth = 512;
 	std::vector<character> characterVector;
-	std::unordered_map<wchar_t, charInfo> charMap;
+	std::unordered_map<char16_t, charInfo> charMap;
 
 	//字形情報を返す。フォントレンダからの字形登録までやってくれる。
-	charInfo getCharInfo(wchar_t request) {
+	charInfo getCharInfo(char16_t request) {
+
+		std::cout << request << std::endl;
 
 		// 要求された文字が登録済みかどうか調べる
 		if (auto iter = charMap.find(request); iter != end(charMap)) {

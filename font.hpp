@@ -26,7 +26,7 @@ class textbox {
 	static std::unordered_map<int, textbox*> ownerList;
 
 	// テキストのプロパティ
-	std::wstring text;
+	std::u16string text;
 	int x;
 	int y;
 	int size;
@@ -39,8 +39,8 @@ class textbox {
 	std::unique_ptr<int[]> characterIDArray;
 
 	public:
-	textbox(std::wstring text, int x, int y, int size, int r, int g, int b);
-	void updateText(std::wstring newText);
+	textbox(std::u16string text, int x, int y, int size, int r, int g, int b);
+	void updateText(std::u16string newText);
 	void updateColor(int newR, int newG, int newB);
 	void updateSize(int newSize);
 	void updatePos(int newX, int newY);
@@ -122,12 +122,12 @@ namespace font {
 
 	// 文字情報を高速に取得するために使う。
 	// Unicodeから文字の幅などの情報を引ける。
-	extern std::unordered_map<wchar_t, charInfo> charMap;
+	extern std::unordered_map<char16_t, charInfo> charMap;
 
 
 
 	//字形情報を返す。フォントレンダからの字形登録までやってくれる。
-	charInfo getCharInfo(wchar_t request);
+	charInfo getCharInfo(char16_t request);
 
 	void reloadVBO();
 
